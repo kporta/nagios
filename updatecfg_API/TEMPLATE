@@ -1,0 +1,94 @@
+##### host define
+define host{
+    use                     generic-host,host-pnp4nagios
+        host_name               DY-HOSTNAME
+        alias                   INSTANCEID
+        address                 IPADDRESS
+}
+
+##### common service
+define service{
+    use                             hour-service,service-pnp4nagios         
+        host_name                       DY-HOSTNAME
+        service_description             Disk Space
+        check_command                   check_nrpe!check_disk!check_disk -w 20% -c 10%
+}
+
+define service{
+    use                             generic-service,service-pnp4nagios
+        host_name                       DY-HOSTNAME
+        service_description             Current Users
+        check_command                   check_nrpe!check_users!check_users -w 8 -c 10
+}
+
+define service{
+    use                             minute-service,service-pnp4nagios
+        host_name                       DY-HOSTNAME
+        service_description             Total Processes
+        check_command                   check_nrpe!check_procs!check_perf check_procs -w 250 -c 400
+}
+
+define service{
+    use                             minute-service,service-pnp4nagios
+        host_name                       DY-HOSTNAME
+        service_description             Zombie Processes
+        check_command                   check_nrpe!check_procs!check_perf check_procs -w 5 -c 10 -s Z
+}
+
+define service{
+    use                             minute-service,service-pnp4nagios
+        host_name                       DY-HOSTNAME
+        service_description             CF-Execd Processes
+        check_command                   check_nrpe!check_procs!check_perf check_procs -w 1: -c 1: -C cf-execd
+}
+
+define service{
+    use                             minute-service,service-pnp4nagios
+        host_name                       DY-HOSTNAME
+        service_description             Current Load
+        check_command                   check_nrpe!check_load!check_load -w 5.0,5.0,5.0 -c 8.0,8.0,8.0
+}
+
+define service{
+    use                             minute-service
+        host_name                       DY-HOSTNAME
+        service_description             SSH
+        check_command                   check_ssh
+}
+
+define service{
+    use                             minute-service,service-pnp4nagios
+        host_name                       DY-HOSTNAME
+        service_description             CPU Usage
+        check_command                   check_nrpe!check_cpu!check_cpu -w 80 -c 90
+}
+
+define service{
+    use                             minute-service,service-pnp4nagios
+        host_name                       DY-HOSTNAME
+        service_description             Open FD
+        check_command                   check_nrpe!check_open_fds!check_open_fds -W 80 -C 90
+}
+
+define service{
+    use                             minute-service,service-pnp4nagios
+        host_name                       DY-HOSTNAME
+        service_description             Context Switches
+        check_command                   check_nrpe!check_context_switches!check_context_switches -w 20000 -c 25000
+}
+
+define service{
+    use                             minute-service,service-pnp4nagios
+        host_name                       DY-HOSTNAME
+        service_description             Eth0 Traffic
+        check_command                   check_nrpe!check_iftraffic!check_iftraffic -i eth0 -b 100 -u m
+}
+
+define service{
+    use                             minute-service,service-pnp4nagios
+        host_name                       DY-HOSTNAME
+        service_description             Memory Usage
+        check_command                   check_nrpe!check_mem!check_mem -uC -w 90 -c 95
+}
+
+##### unique service
